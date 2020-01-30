@@ -3,16 +3,15 @@
     <h1>Notes</h1>
 
     <!-- <Notification message={errorMessage} /> -->
-    <!--
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
-    -->
+    <div>
+      <button @click="toggleShowAll">
+        show {{ state.showAll ? 'important' : 'all' }}
+      </button>
+    </div>
+
     <ul class="note-list">
       <NoteItem
-        v-for="(note, i) in state.notes"
+        v-for="(note, i) in notesToShow"
         :key="i"
         :note="note"
         :toggleImportance="() => toggleImportanceOf(note.id)"
@@ -22,8 +21,6 @@
       <input v-model="state.newNote" />
       <button type="submit" :disabled="isDisabled">save</button>
     </form>
-
-    <!-- <Footer /> -->
   </div>
 </template>
 
@@ -43,15 +40,21 @@ export default createComponent({
     NoteItem
   },
   setup() {
-    const state: {
+    const state = reactive<{
       newNote: string
       notes: Note[]
-    } = reactive({
+      showAll: boolean
+    }>({
       newNote: '',
-      notes: []
+      notes: [],
+      showAll: true
     })
 
     const isDisabled = computed(() => !state.newNote.length)
+
+    const notesToShow = computed(() =>
+      state.showAll ? state.notes : state.notes.filter(note => note.important)
+    )
 
     const handleSubmit = (event: Event) => {
       if (state.newNote) {
@@ -65,6 +68,7 @@ export default createComponent({
         state.newNote = ''
       }
     }
+
     const toggleImportanceOf = (id: number) => {
       const foundNoteIndex = state.notes.findIndex(note => note.id === id)
       if (foundNoteIndex > -1) {
@@ -76,6 +80,10 @@ export default createComponent({
       }
     }
 
+    const toggleShowAll = () => {
+      state.showAll = !state.showAll
+    }
+
     onMounted(() => {
       axios.get('http://localhost:3001/notes').then(response => {
         state.notes = [...state.notes, ...response.data]
@@ -84,8 +92,10 @@ export default createComponent({
     return {
       state,
       isDisabled,
+      notesToShow,
       handleSubmit,
-      toggleImportanceOf
+      toggleImportanceOf,
+      toggleShowAll
     }
   }
 })
