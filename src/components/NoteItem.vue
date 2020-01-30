@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { createComponent, computed } from '@vue/composition-api'
-import { Note } from '@/types/Note'
+import { Note } from '@/types/Notes'
 
 export default createComponent({
   name: 'NoteItem',

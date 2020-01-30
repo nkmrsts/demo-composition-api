@@ -33,8 +33,8 @@ import {
   onMounted
 } from '@vue/composition-api'
 import NoteItem from '@/components/NoteItem.vue'
-import { Note } from '@/types/Note'
-import noteService from './services/notes'
+import { GetAllNotesResponse } from '@/types/Notes'
+import noteService from '@/services/notes'
 
 export default createComponent({
   components: {
@@ -43,7 +43,7 @@ export default createComponent({
   setup() {
     const state = reactive<{
       newNote: string
-      notes: Note[]
+      notes: GetAllNotesResponse
       showAll: boolean
     }>({
       newNote: '',
@@ -70,7 +70,7 @@ export default createComponent({
       }
     }
 
-    const toggleImportanceOf = (id: number) => {
+    const toggleImportanceOf = (id: string) => {
       const foundNote = state.notes.find(note => note.id === id)
 
       if (foundNote !== undefined) {
