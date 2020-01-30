@@ -34,6 +34,7 @@ import {
 } from '@vue/composition-api'
 import NoteItem from '@/components/NoteItem.vue'
 import { Note } from '@/types/Note'
+import noteService from './services/notes'
 
 export default createComponent({
   components: {
@@ -56,26 +57,28 @@ export default createComponent({
       state.showAll ? state.notes : state.notes.filter(note => note.important)
     )
 
-    const handleSubmit = (event: Event) => {
+    const handleSubmit = () => {
       if (state.newNote) {
-        const noteObject: Note = {
+        const noteObject = {
           content: state.newNote,
-          date: new Date().toISOString(),
-          important: false,
-          id: state.notes.length + 1
+          important: false
         }
-        state.notes.push(noteObject)
-        state.newNote = ''
+        noteService.create(noteObject).then(data => {
+          state.notes = state.notes.concat(data)
+          state.newNote = ''
+        })
       }
     }
 
     const toggleImportanceOf = (id: number) => {
-      const foundNoteIndex = state.notes.findIndex(note => note.id === id)
-      if (foundNoteIndex > -1) {
-        const foundNote = state.notes[foundNoteIndex]
-        state.notes.splice(foundNoteIndex, 1, {
-          ...foundNote,
-          important: !foundNote.important
+      const foundNote = state.notes.find(note => note.id === id)
+
+      if (foundNote !== undefined) {
+        const changedNote = { ...foundNote, important: !foundNote.important }
+        noteService.update(id, changedNote).then(returnedNote => {
+          state.notes = state.notes.map(note =>
+            note.id !== id ? note : returnedNote
+          )
         })
       }
     }
@@ -85,8 +88,8 @@ export default createComponent({
     }
 
     onMounted(() => {
-      axios.get('http://localhost:3001/notes').then(response => {
-        state.notes = [...state.notes, ...response.data]
+      noteService.getAll().then(initialNotes => {
+        state.notes = initialNotes
       })
     })
     return {
