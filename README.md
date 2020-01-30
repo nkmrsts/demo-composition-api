@@ -25,3 +25,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### モックデータ用 json-server の起動
 yarn server
+
+
+### setting.json
+.vscode/setting.json
+```
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
