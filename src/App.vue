@@ -9,8 +9,8 @@
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
--->
-    <ul>
+    -->
+    <ul class="note-list">
       <NoteItem
         v-for="(note, i) in state.notes"
         :key="i"
@@ -20,7 +20,7 @@
     </ul>
     <form @submit.prevent="handleSubmit">
       <input v-model="state.newNote" />
-      <button type="submit">save</button>
+      <button type="submit" :disabled="isDisabled">save</button>
     </form>
 
     <!-- <Footer /> -->
@@ -28,7 +28,13 @@
 </template>
 
 <script lang="ts">
-import { createComponent, reactive } from '@vue/composition-api'
+import axios from 'axios'
+import {
+  createComponent,
+  reactive,
+  computed,
+  onMounted
+} from '@vue/composition-api'
 import NoteItem from '@/components/NoteItem.vue'
 import { Note } from '@/types/Note'
 
@@ -44,6 +50,8 @@ export default createComponent({
       newNote: '',
       notes: []
     })
+
+    const isDisabled = computed(() => !state.newNote.length)
 
     const handleSubmit = (event: Event) => {
       if (state.newNote) {
@@ -67,11 +75,23 @@ export default createComponent({
         })
       }
     }
+
+    onMounted(() => {
+      axios.get('http://localhost:3001/notes').then(response => {
+        state.notes = [...state.notes, ...response.data]
+      })
+    })
     return {
       state,
+      isDisabled,
       handleSubmit,
       toggleImportanceOf
     }
   }
 })
 </script>
+<style scoped>
+.note-list {
+  list-style-type: none;
+}
+</style>
