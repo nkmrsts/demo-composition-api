@@ -27,7 +27,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 yarn server
 
 
-### setting.json
+### VS Code設定 setting.json
 .vscode/setting.json
 ```
 {
