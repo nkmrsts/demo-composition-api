@@ -23,9 +23,8 @@ yarn lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### モックデータ用 json-server の起動
-yarn server
-
+### モックサーバー ビルド
+yarn mock:build
 
 ### VS Code設定 setting.json
 .vscode/setting.json
