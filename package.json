@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "NODE_ENV=develop vue-cli-service serve",
     "build": "vue-cli-service build",
+    "mock:build": "axios-mock-server -b",
     "lint": "vue-cli-service lint",
     "server": "json-server -p3001 db.json"
   },
@@ -21,6 +22,7 @@
     "@vue/cli-service": "^4.0.0",
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
+    "axios-mock-server": "^0.16.3",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",

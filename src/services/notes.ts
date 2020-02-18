@@ -1,7 +1,13 @@
 import axios from 'axios'
+import mock from '../../mocks/$mock'
+
 import { PutNoteParams, PostNoteParams } from '@/types/Notes.ts'
 
-const baseUrl = 'http://localhost:3001/api/notes'
+if (process.env.NODE_ENV === 'develop') {
+  mock() // axiosのモック有効化
+}
+
+const baseUrl = 'http://localhost:8080/api/notes'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
