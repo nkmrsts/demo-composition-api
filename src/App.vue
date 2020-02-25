@@ -4,9 +4,7 @@
 
     <!-- <Notification message={errorMessage} /> -->
     <div>
-      <button @click="toggleShowAll">
-        show {{ state.showAll ? 'important' : 'all' }}
-      </button>
+      <button @click="toggleShowAll">show {{ state.showAll ? 'important' : 'all' }}</button>
     </div>
 
     <ul class="note-list">
